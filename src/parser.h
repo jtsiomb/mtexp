@@ -29,6 +29,7 @@ enum {
 	SYMB_PLUS,		/* + */
 	SYMB_MINUS,		/* - */
 	SYMB_MUL,		/* * */
+	SYMB_DOT,		/* . (dot product) */
 	SYMB_COL,		/* c */
 	SYMB_T0,		/* t0 */
 	SYMB_T1,		/* t1 */

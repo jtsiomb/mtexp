@@ -158,7 +158,7 @@ static void active_unit(int unit) {
 }
 
 static int symbol_to_glcombine(int symb) {
-	static int map[] = {GL_ADD, GL_SUBTRACT, GL_MODULATE};
+	static int map[] = {GL_ADD, GL_SUBTRACT, GL_MODULATE, GL_DOT3_RGB};
 	return map[symb];
 }
 

@@ -5,7 +5,7 @@ obj :=
 opt := -g
 inc_flags := -Isrc
 
-CFLAGS := $(opt) -std=c89 -pedantic -Wall -fPIC $(inc_flags) -DDEBUG
+CFLAGS := $(opt) -std=c89 -pedantic -Wall -fPIC $(inc_flags)
 
 include src/Makefile-part
 
@@ -32,6 +32,7 @@ cleandep:
 .PHONY: install
 install:
 	install src/mtexp.h $(PREFIX)/include/
+	rm -f $(PREFIX)/lib/libmtexp.*
 	install libmtexp.* $(PREFIX)/lib/
 	cd $(PREFIX)/lib; ln -s libmtexp.so.0.1.0 libmtexp.so
 	ldconfig

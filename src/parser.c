@@ -46,11 +46,12 @@ static struct tree_stack {
 
 /* symbol table, defines valid symbols, their type, and precedence */
 
-#define SYMB_COUNT	11
+#define SYMB_COUNT	12
 static struct symbol symb_table[SYMB_COUNT] = {
 	{"+",	SYMB_PLUS,	SYMB_TYPE_OP, {10}},
 	{"-",	SYMB_MINUS,	SYMB_TYPE_OP, {10}},
 	{"*",	SYMB_MUL,	SYMB_TYPE_OP, {20}},
+	{".",	SYMB_DOT,	SYMB_TYPE_OP, {20}},
 	{"c",	SYMB_COL,	SYMB_TYPE_ARG, {0}},
 	{"t0",	SYMB_T0,	SYMB_TYPE_ARG, {0}},
 	{"t1",	SYMB_T1,	SYMB_TYPE_ARG, {0}},
