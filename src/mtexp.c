@@ -26,13 +26,16 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "mtexp.h"
 #include "parser.h"
 
-#ifndef GL_TEXTURE_3D
-#define GL_TEXTURE_3D	0x806f
-#endif	/* GL_TEXTURE_3D */
+#ifndef GL_VERSION_1_3
 
-#ifndef GL_TEXTURE_CUBE_MAP
-#define GL_TEXTURE_CUBE_MAP	0x8513
-#endif	/* GL_TEXTURE_CUBE_MAP */
+#define OLD_OPENGL
+#include "glext.h"
+
+PFNGLACTIVETEXTUREARBPROC glActiveTexture;
+PFNGLCLIENTACTIVETEXTUREARBPROC glClientActiveTexture;
+
+#endif	/* GL_VERSION_1_3 */
+
 
 static const GLenum tex_type[] = {
 	GL_TEXTURE_1D,
@@ -133,6 +136,10 @@ void mtexp_disable(const struct mtexp *state) {
 /* ---------- local functions ----------- */
 
 static void init(void) {
+#ifdef OLD_OPENGL
+	glActiveTexture = get_proc_address("glActiveTextureARB");
+	glClientActiveTexture = get_proc_address("glClientActiveTextureARB");
+#endif	/* OLD_OPENGL */
 }
 
 /* sets the active texture unit */
