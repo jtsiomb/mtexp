@@ -2,7 +2,9 @@ libmtexp is a library that provides an intuitive interface to OpenGL
 multitexturing.
 See documentation under the doc directory for more information on how to use it.
 
+
 - Compiling on UNIX
+
 To build libmtexp as a shared library just type `make' (without the quotes
 obviously). If you wish to build a static library instead, type `make
 libmtexp.a'.
@@ -12,21 +14,29 @@ installation prefix, edit the first line of the Makefile, the default is
 You may also wish to change to the examples directory and compile the sample
 program there by typing make.
 
+
 - Compiling on Windows
+
 You can only build libmtexp as a static library under windows. You must have MS
-Visual Studio.NET 2003 or later installed. Open the included mtexp.sln solution
-which contains two projects, the library and the example, and compile them from
-there.
+Visual Studio.NET in order to use the included project file, otherwise just make
+a new static library win32 project add the source files in the src directory,
+and add the src directory to the project's include path.
+Open the included mtexp.sln solution which contains two projects, the library
+and the example, and compile them from there.
 No installation procedure on windows, just add the src/ subdirectory of mtexp to
 the include path of your program that uses mtexp, and link with the static
 library which should be at the Release or Debug directories under mtexp when you
 build it.
 
+
 - License
+
 libmtexp is free software, released under the GNU General Public License. See
 COPYING at the root directory of the library for more details.
 Copyright (c) 2005 John Tsiombikas.
 
+
 - Contact information
+
 email: nuclear@siggraph.org
 web: http://thelab.demoscene.gr/nuclear/
