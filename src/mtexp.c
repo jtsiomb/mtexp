@@ -34,6 +34,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 PFNGLACTIVETEXTUREARBPROC glActiveTexture;
 PFNGLCLIENTACTIVETEXTUREARBPROC glClientActiveTexture;
 
+#if defined(__unix__)
+#define get_proc_address(s)	glXGetProcAddress(s)
+#elif defined(WIN32)
+#define get_proc_address(s)	wglGetProcAddress(s)
+#endif
+
 #endif	/* GL_VERSION_1_3 */
 
 
