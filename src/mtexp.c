@@ -22,11 +22,14 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#ifdef WIN32
+#include <windows.h>
+#endif	/* WIN32 */
 #include <GL/gl.h>
 #include "mtexp.h"
 #include "parser.h"
 
-#ifndef GL_VERSION_1_3
+#if !defined(GL_VERSION_1_3) || defined(WIN32)
 
 #define OLD_OPENGL
 #include "glext.h"

@@ -24,6 +24,21 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "image.h"
 #include "mtexp.h"
 
+#ifndef GL_VERSION_1_3
+#define OLD_OPENGL
+
+#include "glext.h"
+
+PFNGLMULTITEXCOORD2FARBPROC glMultiTexCoord2f;
+
+#if defined(__unix__)
+#define get_proc_address(s)	glXGetProcAddress(s)
+#elif defined(WIN32)
+#define get_proc_address(s)	wglGetProcAddress(s)
+#endif
+
+#endif	/* GL_VERSION_1_3 */
+
 void update_display(void);
 void key_handler(unsigned char k, int x, int y);
 int load_texture(const char *fname);
@@ -43,6 +58,10 @@ int main(int argc, char **argv) {
 	glutKeyboardFunc(key_handler);
 
 	atexit(cleanup);
+
+#ifdef OLD_OPENGL
+	glMultiTexCoord2f = get_proc_address("glMultiTexCoord2fARB");
+#endif
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
