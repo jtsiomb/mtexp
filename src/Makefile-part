@@ -1,0 +1,1 @@
+obj += src/parser.o src/mtexp.o

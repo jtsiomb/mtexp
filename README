@@ -1,0 +1,19 @@
+libmtexp is a library that provides an intuitive interface to OpenGL
+multitexturing.
+See documentation under the doc directory for more information on how to use it.
+
+- Compiling
+To build libmtexp as a shared library just type `make' (without the quotes
+obviously). If you wish to build a static library instead, type `make
+libmtexp.a'.
+You may also wish to change to the examples directory and compile the sample
+program there by typing make.
+
+- License
+libmtexp is free software, released under the GNU General Public License. See
+COPYING at the root directory of the library for more details.
+Copyright (c) 2005 John Tsiombikas.
+
+- Contact information
+email: nuclear@siggraph.org
+web: http://thelab.demoscene.gr/nuclear/
