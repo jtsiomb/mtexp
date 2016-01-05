@@ -9,6 +9,9 @@ CFLAGS := $(opt) -std=c89 -pedantic -Wall -fPIC $(inc_flags)
 
 include src/Makefile-part
 
+.PHONY: all
+all: libmtexp.so.0.1.0 libmtexp.a
+
 libmtexp.so.0.1.0: $(obj)
 	$(CC) -shared -Wl,-soname,libmtexp.so.0 -o $@ $(obj)
 
