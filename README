@@ -3,10 +3,10 @@ Historical note from the future
 libmtexp is an old library I wrote back in the early 00s to make it easier to
 setup fixed function OpenGL multitexturing.
 
-Back then pixel shaders where in their infancy, or at least not ubiquitous yet,
-so we had to deal with the fixed function multitexturing interface of OpenGL,
-which involved calling glTexEnv a bunch of times for each texture unit, to
-combine multiple textures correctly.
+Back then pixel shaders where in their infancy, or at least not ubiquitous yet.
+To combine multiple textures, we had to deal with the fixed function
+multitexturing interface of OpenGL, which involved calling glTexEnv a bunch of
+times for each texture unit.
 
 Now there's no point to any of this. Shaders made it trivial to combine multiple
 textures in arbitrary ways. I'm uploading this code just as a reminder of the
