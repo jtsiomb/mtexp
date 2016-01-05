@@ -24,20 +24,21 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "image.h"
 #include "mtexp.h"
 
-#ifndef GL_VERSION_1_3
+#ifdef __unix__
+#include <GL/glx.h>
+#endif
+
 #define OLD_OPENGL
 
-#include "glext.h"
+#include <GL/glext.h>
 
-PFNGLMULTITEXCOORD2FARBPROC glMultiTexCoord2f;
+PFNGLMULTITEXCOORD2FARBPROC gl_multi_tex_coord2f;
 
 #if defined(__unix__)
 #define get_proc_address(s)	glXGetProcAddress(s)
 #elif defined(WIN32)
 #define get_proc_address(s)	wglGetProcAddress(s)
 #endif
-
-#endif	/* GL_VERSION_1_3 */
 
 void update_display(void);
 void key_handler(unsigned char k, int x, int y);
@@ -60,7 +61,7 @@ int main(int argc, char **argv) {
 	atexit(cleanup);
 
 #ifdef OLD_OPENGL
-	glMultiTexCoord2f = get_proc_address("glMultiTexCoord2fARB");
+	gl_multi_tex_coord2f = get_proc_address("glMultiTexCoord2fARB");
 #endif
 
 	glEnable(GL_DEPTH_TEST);
@@ -97,17 +98,17 @@ void update_display(void) {
 
 	glBegin(GL_QUADS);
 	glNormal3f(0.0, 0.0, 1.0);
-	glMultiTexCoord2f(0, 0.0, 0.0);
-	glMultiTexCoord2f(1, 0.0, 0.0);
+	gl_multi_tex_coord2f(0, 0.0, 0.0);
+	gl_multi_tex_coord2f(1, 0.0, 0.0);
 	glVertex3f(-2.0, 1.0, 0.0);
-	glMultiTexCoord2f(0, 1.0, 0.0);
-	glMultiTexCoord2f(1, 1.0, 0.0);
+	gl_multi_tex_coord2f(0, 1.0, 0.0);
+	gl_multi_tex_coord2f(1, 1.0, 0.0);
 	glVertex3f(2.0, 1.0, 0.0);
-	glMultiTexCoord2f(0, 1.0, 1.0);
-	glMultiTexCoord2f(1, 1.0, 1.0);
+	gl_multi_tex_coord2f(0, 1.0, 1.0);
+	gl_multi_tex_coord2f(1, 1.0, 1.0);
 	glVertex3f(2.0, -1.0, 0.0);
-	glMultiTexCoord2f(0, 0.0, 1.0);
-	glMultiTexCoord2f(1, 0.0, 1.0);
+	gl_multi_tex_coord2f(0, 0.0, 1.0);
+	gl_multi_tex_coord2f(1, 0.0, 1.0);
 	glVertex3f(-2.0, -1.0, 0.0);
 	glEnd();
 
@@ -124,7 +125,7 @@ void key_handler(unsigned char k, int x, int y) {
 
 int load_texture(const char *fname) {
 	unsigned int tex_id;
-	unsigned long *img, x, y;
+	unsigned int *img, x, y;
 
 	if(!(img = load_image(fname, &x, &y))) {
 		fprintf(stderr, "failed loading texture \"%s\"\n", fname);

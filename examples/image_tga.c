@@ -54,8 +54,8 @@ struct tga_header {
 };
 
 struct tga_footer {
-	unsigned long ext_off;		/* extension area offset */
-	unsigned long devdir_off;	/* developer directory offset */
+	unsigned int ext_off;		/* extension area offset */
+	unsigned int devdir_off;	/* developer directory offset */
 	char sig[18];				/* signature with . and \0 */
 };
 
@@ -71,11 +71,11 @@ int check_tga(FILE *fp) {
 	return strcmp(foot.sig, "TRUEVISION-XFILE.") == 0 ? 1 : 0;
 }
 
-void *load_tga(FILE *fp, unsigned long *xsz, unsigned long *ysz) {
+void *load_tga(FILE *fp, unsigned int *xsz, unsigned int *ysz) {
 	struct tga_header hdr;
-	unsigned long x, y, sz;
+	unsigned int x, y, sz;
 	int i;
-	unsigned long *pix;
+	unsigned int *pix;
 
 	/* read header */
 	fseek(fp, 0, SEEK_SET);
@@ -120,7 +120,7 @@ void *load_tga(FILE *fp, unsigned long *xsz, unsigned long *ysz) {
 	}
 
 	for(i=0; i<y; i++) {
-		unsigned long *ptr;
+		unsigned int *ptr;
 		int j;
 
 		ptr = pix + ((hdr.img_desc & 0x20) ? i : y-(i+1)) * x;
@@ -144,12 +144,12 @@ void *load_tga(FILE *fp, unsigned long *xsz, unsigned long *ysz) {
 	return pix;
 }
 
-int save_tga(FILE *fp, void *pixels, unsigned long xsz, unsigned long ysz) {
+int save_tga(FILE *fp, void *pixels, unsigned int xsz, unsigned int ysz) {
 	struct tga_header hdr;
 	struct tga_footer ftr;
-	unsigned long pix_count = xsz * ysz;
-	unsigned long *pptr = pixels;
-	unsigned long save_flags;
+	unsigned int pix_count = xsz * ysz;
+	unsigned int *pptr = pixels;
+	unsigned int save_flags;
 	int i;
 
 	save_flags = get_image_save_flags();

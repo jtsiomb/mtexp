@@ -48,7 +48,7 @@ struct symbol {
 	char *str;	/* textual representation in the expression */
 	int symb;
 	int type;
-	
+
 	union {
 		int precedence;	/* for operators */
 		float value[4];	/* for constants */

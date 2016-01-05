@@ -69,7 +69,7 @@ extern "C" {
 /* load_image() loads the specified image from file, returns the pixel data
  * in 32bit mode, and changes xsz and ysz to the size of the image
  */
-void *load_image(const char *fname, unsigned long *xsz, unsigned long *ysz);
+void *load_image(const char *fname, unsigned int *xsz, unsigned int *ysz);
 
 /* deallocate the image data with this function
  * note: provided for consistency, simply calls free()
@@ -77,7 +77,7 @@ void *load_image(const char *fname, unsigned long *xsz, unsigned long *ysz);
 void free_image(void *img);
 
 /* save the supplied image data in a file of the specified format */
-int save_image(const char *fname, void *pixels, unsigned long xsz, unsigned long ysz, enum image_file_format fmt);
+int save_image(const char *fname, void *pixels, unsigned int xsz, unsigned int ysz, enum image_file_format fmt);
 
 /* set/get save image options */
 void set_image_save_flags(unsigned int flags);

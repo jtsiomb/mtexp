@@ -30,27 +30,27 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #ifdef IMGLIB_USE_PNG
 int check_png(FILE *fp);
-void *load_png(FILE *fp, unsigned long *xsz, unsigned long *ysz);
-int save_png(FILE *fp, void *pixels, unsigned long xsz, unsigned long ysz);
+void *load_png(FILE *fp, unsigned int *xsz, unsigned int *ysz);
+int save_png(FILE *fp, void *pixels, unsigned int xsz, unsigned int ysz);
 #endif	/* IMGLIB_USE_PNG */
 
 #ifdef IMGLIB_USE_JPEG
 int check_jpeg(FILE *fp);
-void *load_jpeg(FILE *fp, unsigned long *xsz, unsigned long *ysz);
-int save_jpeg(FILE *fp, void *pixels, unsigned long xsz, unsigned long ysz);
+void *load_jpeg(FILE *fp, unsigned int *xsz, unsigned int *ysz);
+int save_jpeg(FILE *fp, void *pixels, unsigned int xsz, unsigned int ysz);
 #endif	/* IMGLIB_USE_JPEG */
 
 #ifdef IMGLIB_USE_TGA
 int check_tga(FILE *fp);
-void *load_tga(FILE *fp, unsigned long *xsz, unsigned long *ysz);
-int save_tga(FILE *fp, void *pixels, unsigned long xsz, unsigned long ysz);
+void *load_tga(FILE *fp, unsigned int *xsz, unsigned int *ysz);
+int save_tga(FILE *fp, void *pixels, unsigned int xsz, unsigned int ysz);
 #endif	/* IMGLIB_USE_TGA */
 
 
-static unsigned long save_flags;
+static unsigned int save_flags;
 
 
-void *load_image(const char *fname, unsigned long *xsz, unsigned long *ysz) {
+void *load_image(const char *fname, unsigned int *xsz, unsigned int *ysz) {
 	FILE *file;
 
 	if(!(file = fopen(fname, "rb"))) {
@@ -83,7 +83,7 @@ void free_image(void *img) {
 	free(img);
 }
 
-int save_image(const char *fname, void *pixels, unsigned long xsz, unsigned long ysz, enum image_file_format fmt) {
+int save_image(const char *fname, void *pixels, unsigned int xsz, unsigned int ysz, enum image_file_format fmt) {
 	FILE *fp;
 
 	if(!(fp = fopen(fname, "wb"))) {

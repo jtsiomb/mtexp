@@ -56,8 +56,8 @@ static struct symbol symb_table[SYMB_COUNT] = {
 	{"t0",	SYMB_T0,	SYMB_TYPE_ARG, {0}},
 	{"t1",	SYMB_T1,	SYMB_TYPE_ARG, {0}},
 	{"t2",	SYMB_T2,	SYMB_TYPE_ARG, {0}},
-	{"t3",	SYMB_T3, 	SYMB_TYPE_ARG, {0}},
-	{"(",	SYMB_OPEN, 	SYMB_TYPE_PAREN, {0}},
+	{"t3",	SYMB_T3,	SYMB_TYPE_ARG, {0}},
+	{"(",	SYMB_OPEN,	SYMB_TYPE_PAREN, {0}},
 	{")",	SYMB_CLOSE,	SYMB_TYPE_PAREN, {0}},
 	{"#",	SYMB_NUM,	SYMB_TYPE_ARG, {0}}
 };
@@ -80,9 +80,9 @@ struct ptree *mtexp_parse(const char *expr) {
 
 	while(*++eptr) {
 		struct symbol *symb;
-		
+
 		if(isspace(*eptr)) continue;	/* eat up any whitespace */
-		
+
 		/* get the next symbol (accepts only symbols in the symb_table[]) */
 		if(!(symb = match_symbol(eptr))) {
 			fprintf(stderr, "unexpected token: %s\n", eptr);
@@ -92,7 +92,7 @@ struct ptree *mtexp_parse(const char *expr) {
 
 		/* symbol accepted, consume it from the input */
 		eptr = consume(symb->symb, eptr);
-		
+
 		/* parse the thing */
 		switch(symb->type) {
 		case SYMB_TYPE_ARG:
@@ -230,14 +230,14 @@ static void shift(struct symbol *s) {
  * pops an operator from the operator stack and the appropriate
  * number of operands from the argument stack, makes a tree out of
  * them and pushes it back in the argument stack.
- * 
+ *
  * note: at this point all operators are binary, so it always gets
  * two arguments from the stack.
  */
 static int reduce(void) {
 	struct symbol op;
 	struct ptree *a1, *a2;
-				
+
 	if(SSIZE(arg_stack) < 2) return -1;
 
 	op = POP(op_stack);
@@ -290,17 +290,17 @@ static struct symbol *match_symbol(const char *str) {
 			while(isdigit(*str) || *str == '.') str++;
 			while(isspace(*str) || *str == ',') str++;
 		}
-		
+
 		if(*str != '>') return 0;
 		return &s;
 	}
-		
+
 
 	for(i=0; i<SYMB_COUNT; i++) {
 		const char *symb, *strptr;
 
 		if(i == SYMB_NUM) continue;
-		
+
 		symb = symb_table[i].str;
 		strptr = str;
 		while(*symb && *strptr && *symb == *strptr) {

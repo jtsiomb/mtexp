@@ -82,10 +82,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 /* color packing macros */
 #define PACK_COLOR32(a,r,g,b) \
-	((((unsigned long)(a) & ALPHA_MASK32) << ALPHA_SHIFT32) | \
-	(((unsigned long)(r) & RED_MASK32) << RED_SHIFT32) | \
-	(((unsigned long)(g) & GREEN_MASK32) << GREEN_SHIFT32) | \
-	(((unsigned long)(b) & BLUE_MASK32) << BLUE_SHIFT32))
+	((((unsigned int)(a) & ALPHA_MASK32) << ALPHA_SHIFT32) | \
+	(((unsigned int)(r) & RED_MASK32) << RED_SHIFT32) | \
+	(((unsigned int)(g) & GREEN_MASK32) << GREEN_SHIFT32) | \
+	(((unsigned int)(b) & BLUE_MASK32) << BLUE_SHIFT32))
 
 #define PACK_COLOR24(r,g,b)		PACK_COLOR32(0xff,r,g,b)
 

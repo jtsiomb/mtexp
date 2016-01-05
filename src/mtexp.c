@@ -26,24 +26,23 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <windows.h>
 #endif	/* WIN32 */
 #include <GL/gl.h>
+#if defined(__unix__)
+#include <GL/glx.h>
+#endif
 #include "mtexp.h"
 #include "parser.h"
 
-#if !defined(GL_VERSION_1_3) || defined(WIN32)
 
-#define OLD_OPENGL
 #include "glext.h"
 
-PFNGLACTIVETEXTUREARBPROC glActiveTexture;
-PFNGLCLIENTACTIVETEXTUREARBPROC glClientActiveTexture;
+PFNGLACTIVETEXTUREARBPROC gl_active_texture;
+PFNGLCLIENTACTIVETEXTUREARBPROC gl_client_active_texture;
 
 #if defined(__unix__)
 #define get_proc_address(s)	glXGetProcAddress(s)
 #elif defined(WIN32)
 #define get_proc_address(s)	wglGetProcAddress(s)
 #endif
-
-#endif	/* GL_VERSION_1_3 */
 
 
 static const GLenum tex_type[] = {
@@ -92,19 +91,19 @@ struct mtexp *mtexp_create(const char *expr, ...) {
 		first_call = 0;
 		init();
 	}
-	
+
 	ts = malloc(sizeof(struct mtexp));
 	ts->first_call = 1;
 
 	ts->tree = mtexp_parse(expr);
 	mtexp_show_ptree(ts->tree);
-	
+
 	if(height(ts->tree) != count_ops(ts->tree) + 1) {
 		fprintf(stderr, "invalid texture state tree (ops: %d, height: %d)\n", count_ops(ts->tree), height(ts->tree));
 		mtexp_free(ts);
 		return 0;
 	}
-	
+
 	ts->tex_count = count_tex_usage(ts->tree);
 	printf("textures in tree: %d\n", ts->tex_count);
 
@@ -113,7 +112,7 @@ struct mtexp *mtexp_create(const char *expr, ...) {
 	for(i=0; i<ts->tex_count; i++) {
 		ts->tex[i] = va_arg(arg_list, unsigned int);
 	}
-	
+
 	va_end(arg_list);
 
 	return ts;
@@ -129,7 +128,7 @@ int mtexp_enable(const struct mtexp *state) {
 	first_call = state->first_call;
 	if(state->first_call) ((struct mtexp*)state)->first_call = 0;
 #endif	/* DEBUG */
-	
+
 	return set_tex_state_rec(state->tree, state->tex, height(state->tree) - 2);
 }
 
@@ -145,16 +144,14 @@ void mtexp_disable(const struct mtexp *state) {
 /* ---------- local functions ----------- */
 
 static void init(void) {
-#ifdef OLD_OPENGL
-	glActiveTexture = get_proc_address("glActiveTextureARB");
-	glClientActiveTexture = get_proc_address("glClientActiveTextureARB");
-#endif	/* OLD_OPENGL */
+	gl_active_texture = get_proc_address("glActiveTextureARB");
+	gl_client_active_texture = get_proc_address("glClientActiveTextureARB");
 }
 
 /* sets the active texture unit */
 static void active_unit(int unit) {
-	glActiveTexture((GLenum)((int)GL_TEXTURE0 + unit));
-	glClientActiveTexture((GLenum)((int)GL_TEXTURE0 + unit));
+	gl_active_texture((GLenum)((int)GL_TEXTURE0 + unit));
+	gl_client_active_texture((GLenum)((int)GL_TEXTURE0 + unit));
 }
 
 static int symbol_to_glcombine(int symb) {
@@ -164,7 +161,7 @@ static int symbol_to_glcombine(int symb) {
 
 static int symbol_to_glsource(struct symbol *s) {
 	int res;
-	
+
 	if(s->type == SYMB_TYPE_ARG) {
 		switch(s->symb) {
 		case SYMB_COL:
@@ -187,7 +184,7 @@ static int symbol_to_glsource(struct symbol *s) {
 
 static void bind_texture(unsigned int tex) {
 	const GLenum *tptr = tex_type;
-	
+
 	do {
 		glGetError();	/* clear errors */
 		glBindTexture(*tptr, tex);
@@ -199,7 +196,7 @@ static void bind_texture(unsigned int tex) {
 
 static int handle_operand(struct symbol *symb, const unsigned int *tex) {
 	int operand = symbol_to_glsource(symb);
-	
+
 	if(operand == GL_TEXTURE) {
 		bind_texture(tex[symb->symb - SYMB_T0]);
 	} else if(operand == GL_CONSTANT) {
@@ -214,10 +211,10 @@ static int set_tex_state_rec(const struct ptree *t, const unsigned int *tex, int
 
 	if(set_tex_state_rec(t->left, tex, height - 1) == -1) return -1;
 	if(set_tex_state_rec(t->right, tex, height - 1) == -1) return -1;
-	
+
 	if(t->symb.type == SYMB_TYPE_OP) {
 		int s0, s1, op;
-		
+
 		if(!t->left || !t->right) {
 			fprintf(stderr, "came upon a binary operator with less than two operands!?\n");
 			return -1;
@@ -228,7 +225,7 @@ static int set_tex_state_rec(const struct ptree *t, const unsigned int *tex, int
 		op = symbol_to_glcombine(t->symb.symb);
 		s0 = handle_operand(&t->left->symb, tex);
 		s1 = handle_operand(&t->right->symb, tex);
-		
+
 		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
 		glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, op);
 		glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB, s0);
