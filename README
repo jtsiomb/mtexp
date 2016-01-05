@@ -1,6 +1,36 @@
+Historical note from the future
+-------------------------------
+libmtexp is an old library I wrote back in the early 00s to make it easier to
+setup fixed function OpenGL multitexturing.
+
+Back then pixel shaders where in their infancy, or at least not ubiquitous yet,
+so we had to deal with the fixed function multitexturing interface of OpenGL,
+which involved calling glTexEnv a bunch of times for each texture unit, to
+combine multiple textures correctly.
+
+Now there's no point to any of this. Shaders made it trivial to combine multiple
+textures in arbitrary ways. I'm uploading this code just as a reminder of the
+olden days.
+
+Original readme follows.
+-----------------------
+
 libmtexp is a library that provides an intuitive interface to OpenGL
 multitexturing.
-See documentation under the doc directory for more information on how to use it.
+
+Simply call mtexp_create with an expression, and any number of texture objects
+as arguments, to compile a multitexturing state. Then call mtexp_enable with the
+returned state to use it for rendering. See examples/mtex_expr.c for details.
+
+For example the expression "t0 * c + t1" would result in multiplying the first
+texture with the color produced by ligthing calculations or glColor calls, and
+adding the second texture to that. Immediate colors can be specified in angle
+brackets like this: <r g b> where r, g, and b are values from 0 to 1. Standard
+operator precedence and associativity rules apply, and you can use parentheses
+to change the term grouping as usual.
+
+Try running the example program with various expressions, in quotes as a single
+command-line argument, to see how it works in practice.
 
 
 - Compiling on UNIX
@@ -38,5 +68,5 @@ Copyright (c) 2005 John Tsiombikas.
 
 - Contact information
 
-email: nuclear@siggraph.org
-web: http://thelab.demoscene.gr/nuclear/
+email: nuclear@member.fsf.org
+web: http://nuclear.mutantstargoat.com
